@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print to PDF</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        function printToPDF() {
+            const { jsPDF } = window.jspdf;
+            let doc = new jsPDF();
+            let printContent = document.getElementById("textInput").value;
+            doc.text(printContent, 10, 10);
+            
+            // Create a blob and a temporary download link for iOS
+            let pdfBlob = doc.output("blob");
+            let blobUrl = URL.createObjectURL(pdfBlob);
+            let link = document.createElement("a");
+            link.href = blobUrl;
+            link.download = "output.pdf";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</head>
+<body>
+    <h2>Enter Text and Print to PDF</h2>
+    <input type="text" id="textInput" placeholder="Enter text here">
+    <button onclick="printToPDF()">Print</button>
+</body>
+</html>
