@@ -3,30 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Print to PDF</title>
+    <title>Contract Form - MVP</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        .form-section {
+            margin-bottom: 15px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="number"], input[type="date"], select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .logo {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Contract Form - MVP</h2>
+
+    <!-- Logo Image Added Here (Base64) -->
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUMAAACQCAYAAACS7gkyAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMA" alt="Closets by Design Logo" class="logo">
+
+    <form id="contractForm">
+        <div class="form-section">
+            <label for="jobId">Job ID</label>
+            <input type="text" id="jobId" name="jobId" placeholder="Job ID">
+        </div>
+
+        <div class="form-section">
+            <label for="clientName">Client Name</label>
+            <input type="text" id="clientName" name="clientName" placeholder="Client Name">
+        </div>
+
+        <div class="form-section">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date">
+        </div>
+
+        <div class="form-section">
+            <label for="designerName">Designer Name</label>
+            <input type="text" id="designerName" name="designerName" placeholder="Designer Name">
+        </div>
+
+        <div class="form-section">
+            <label for="collectionColor">Collection Colour</label>
+            <input type="text" id="collectionColor" name="collectionColor" placeholder="Collection Colour">
+        </div>
+
+        <div class="form-section">
+            <label for="collection">Collection</label>
+            <select id="collection" name="collection">
+                <option value="Winter Fun">Winter Fun</option>
+                <option value="Spring Breeze">Spring Breeze</option>
+                <option value="Summer Glow">Summer Glow</option>
+            </select>
+        </div>
+
+        <div class="form-section">
+            <label for="installArea">Install Area</label>
+            <input type="text" id="installArea" name="installArea" placeholder="Install Area">
+        </div>
+
+        <div class="form-section">
+            <label for="doors">Doors</label>
+            <input type="text" id="doors" name="doors" placeholder="Door Deco Style">
+            <select id="doorStyle" name="doorStyle">
+                <option value="Avanti">Avanti</option>
+                <option value="Shaker">Shaker</option>
+            </select>
+            <label>Quantity:</label>
+            <input type="number" id="doorQuantity" name="doorQuantity" placeholder="Quantity">
+            <label for="doorsCheckbox">Include Doors?</label>
+            <input type="checkbox" id="doorsCheckbox" name="doorsCheckbox" checked> Yes
+        </div>
+
+        <div class="form-section">
+            <label for="drawers">Drawers</label>
+            <input type="text" id="drawers" name="drawers" placeholder="Drawer Deco Style">
+            <select id="drawerStyle" name="drawerStyle">
+                <option value="Deco">Deco</option>
+                <option value="Modern">Modern</option>
+            </select>
+            <label>Quantity:</label>
+            <input type="number" id="drawerQuantity" name="drawerQuantity" placeholder="Quantity">
+            <label for="drawersCheckbox">Include Drawers?</label>
+            <input type="checkbox" id="drawersCheckbox" name="drawersCheckbox" checked> Yes
+        </div>
+
+        <div class="form-section">
+            <button type="button" onclick="printToPDF()">Save & Submit</button>
+        </div>
+    </form>
+
     <script>
         function printToPDF() {
             const { jsPDF } = window.jspdf;
             let doc = new jsPDF();
-            let printContent = document.getElementById("textInput").value;
-            doc.text(printContent, 10, 10);
-            
+
+            // Base64 image data for the logo (same as the one used in the image tag above)
+            const imgBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAUMAAACQCAYAAACS7gkyAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMA';
+
+            // Add the background image (logo)
+            doc.addImage(imgBase64, 'PNG', 0, 0, 210, 297); // A4 size (210mm x 297mm)
+
+            // Get form data
+            let jobId = document.getElementById("jobId").value;
+            let clientName = document.getElementById("clientName").value;
+            let date = document.getElementById("date").value;
+            let designerName = document.getElementById("designerName").value;
+            let collectionColor = document.getElementById("collectionColor").value;
+            let collection = document.getElementById("collection").value;
+            let installArea = document.getElementById("installArea").value;
+            let doorQuantity = document.getElementById("doorQuantity").value;
+            let drawerQuantity = document.getElementById("drawerQuantity").value;
+
+            // Adding form data to PDF
+            doc.text(`Job ID: ${jobId}`, 10, 70);
+            doc.text(`Client Name: ${clientName}`, 10, 80);
+            doc.text(`Date: ${date}`, 10, 90);
+            doc.text(`Designer Name: ${designerName}`, 10, 100);
+            doc.text(`Collection Colour: ${collectionColor}`, 10, 110);
+            doc.text(`Collection: ${collection}`, 10, 120);
+            doc.text(`Install Area: ${installArea}`, 10, 130);
+            doc.text(`Door Quantity: ${doorQuantity}`, 10, 140);
+            doc.text(`Drawer Quantity: ${drawerQuantity}`, 10, 150);
+
             // Create a blob and a temporary download link for iOS
             let pdfBlob = doc.output("blob");
             let blobUrl = URL.createObjectURL(pdfBlob);
             let link = document.createElement("a");
             link.href = blobUrl;
-            link.download = "output.pdf";
+            link.download = "contract_form_output.pdf";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
     </script>
-</head>
-<body>
-    <h2>Enter Text and Print to PDF</h2>
-    <input type="text" id="textInput" placeholder="Enter text here">
-    <button onclick="printToPDF()">Print</button>
 </body>
 </html>
