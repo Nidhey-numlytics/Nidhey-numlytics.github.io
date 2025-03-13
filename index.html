@@ -59,28 +59,30 @@
     messagingSenderId: "760621802704",
     appId: "1:760621802704:web:42c4c66dc6ed305f656ad5",
     measurementId: "G-P2ZTTZNW10"
-  };
+	};
 
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
     // Handle Login Button Click
-    document.getElementById('loginButton').onclick = function() {
-      const email = document.getElementById('emailInput').value;
-      const password = document.getElementById('passwordInput').value;
-      auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-          // User successfully signed in – show protected content
-          document.getElementById('loginContainer').classList.add('hidden');
-          document.getElementById('contentContainer').classList.remove('hidden');
-        })
-        .catch((error) => {
-          // Display error if sign in fails
-          document.getElementById('loginError').textContent = error.message;
-          document.getElementById('loginError').style.display = 'block';
-        });
-    };
+	document.getElementById('loginButton').onclick = function() {
+	console.log("Login button clicked");
+	const email = document.getElementById('emailInput').value;
+	const password = document.getElementById('passwordInput').value;
+	auth.signInWithEmailAndPassword(email, password)
+		.then((userCredential) => {
+		console.log("Login successful", userCredential);
+		document.getElementById('loginContainer').classList.add('hidden');
+		document.getElementById('contentContainer').classList.remove('hidden');
+		})
+		.catch((error) => {
+		console.error("Login error:", error);
+		document.getElementById('loginError').textContent = error.message;
+		document.getElementById('loginError').style.display = 'block';
+		});
+	};
+
 
     // Monitor auth state and adjust the UI accordingly
     auth.onAuthStateChanged((user) => {
