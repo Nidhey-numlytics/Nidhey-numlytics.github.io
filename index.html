@@ -160,7 +160,8 @@
     firebase.auth().signOut().then(() => {
       console.log("User signed out.");
       // Redirect to the login page after sign out
-      window.location.href = "index.html"; // Change to your login page URL
+      document.getElementById('loginContainer').classList.remove('hidden');
+      document.getElementById('contentContainer').classList.add('hidden'); // Change to your login page URL
     }).catch((error) => {
       console.error("Error signing out:", error);
     });
