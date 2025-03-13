@@ -120,7 +120,7 @@
 		yPos += 10;
 		doc.text(`Client Name: ${document.getElementById("clientName").value}`, 10, yPos);
 		yPos += 10;
-		doc.text(`Date: ${document.getElementById("date").value}`, 10, yPos);
+		doc.text(`Date: ${new Date().toLocaleDateString()}`, 10, yPos);
 		yPos += 15;
 		
 		// Terms and Conditions Section
