@@ -94,15 +94,66 @@
     });
 
     // Generate PDF function (using jsPDF)
-    function printToPDF() {
-      const { jsPDF } = window.jspdf;
-      let doc = new jsPDF();
-      let jobId = document.getElementById("jobId").value;
-      let clientName = document.getElementById("clientName").value;
-      doc.text(`Job ID: ${jobId}`, 10, 20);
-      doc.text(`Client Name: ${clientName}`, 10, 30);
-      doc.save("contract_form.pdf");
-    }
+	function generateContractPDF() {
+		const { jsPDF } = window.jspdf;
+		let doc = new jsPDF('p', 'mm', 'a4'); // Portrait, millimeters, A4 size
+	
+		// Set up some default styles
+		doc.setFont("helvetica", "bold");
+		doc.setFontSize(18);
+		doc.text("Contract Agreement", 105, 20, { align: "center" });
+		
+		// Add a logo if desired (x, y, width, height)
+		// Assuming you have a base64 string for the logo
+		const logoBase64 = "data:image/png;base64,iVBOR..."; // truncated for brevity
+		doc.addImage(logoBase64, "PNG", 10, 10, 30, 30);
+		
+		// Add contract data (reset font style)
+		doc.setFont("helvetica", "normal");
+		doc.setFontSize(12);
+		let yPos = 40;
+		
+		// Insert form data
+		doc.text(`Job ID: ${document.getElementById("jobId").value}`, 10, yPos);
+		yPos += 10;
+		doc.text(`Client Name: ${document.getElementById("clientName").value}`, 10, yPos);
+		yPos += 10;
+		doc.text(`Date: ${document.getElementById("date").value}`, 10, yPos);
+		yPos += 15;
+		
+		// Terms and Conditions Section
+		doc.setFont("helvetica", "bold");
+		doc.text("Terms and Conditions", 10, yPos);
+		yPos += 10;
+		doc.setFont("helvetica", "normal");
+		
+		// Static terms and conditions text (this can be dynamic if needed)
+		const terms = "1. The client agrees to the terms as outlined in this document.\n" +
+					"2. Payment terms are net 30 days from the date of invoice.\n" +
+					"3. Both parties agree to resolve any disputes amicably.\n" +
+					"4. This contract is governed by the laws of [Your Jurisdiction].\n";
+		let splitTerms = doc.splitTextToSize(terms, 180); // Wrap text to 180mm width
+		doc.text(splitTerms, 10, yPos);
+		yPos += splitTerms.length * 7;
+		
+		// Add a page break if needed
+		if (yPos > 250) {
+		doc.addPage();
+		yPos = 20;
+		}
+		
+		// Signature Fields
+		doc.setFont("helvetica", "bold");
+		doc.text("Authorized Signature:", 10, yPos + 20);
+		// Draw a line for signature (x1, y1, x2, y2)
+		doc.line(60, yPos + 18, 150, yPos + 18);
+		
+		doc.text("Client Signature:", 10, yPos + 40);
+		doc.line(60, yPos + 38, 150, yPos + 38);
+		
+		// Save the PDF
+		doc.save("contract_agreement.pdf");
+	}
 	
 	document.getElementById("signOutBtn").addEventListener("click", function() {
     firebase.auth().signOut().then(() => {
